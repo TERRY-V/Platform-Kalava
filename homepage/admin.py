@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Website, Column, News, FriendLinks
+from .models import Website, Column, News
 
 @admin.register(Website)
 class WebsiteAdmin(admin.ModelAdmin):
@@ -11,11 +11,6 @@ class WebsiteAdmin(admin.ModelAdmin):
 class ColumnAdmin(admin.ModelAdmin):
     list_display = ('column_name', 'column_url', 'column_icon', 'column_order', 'column_status')
     list_display_links = ('column_name',)
-
-@admin.register(FriendLinks)
-class FriendLinksAdmin(admin.ModelAdmin):
-    list_display = ('linkname', 'linkurl', 'linkorder', 'formatCreateTime')
-    list_display_links = ('linkname',)
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):

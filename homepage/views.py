@@ -66,16 +66,6 @@ def declaration(request):
             'column_list': column_list,}
     return render(request, 'homepage/declaration.html', context)
 
-def links(request):
-    site_info = Website.objects.first()
-    column_now = Column.objects.get(pk=1)
-    column_list = Column.objects.order_by('column_order')
-
-    context = {'site_info': site_info, 
-            'column_now': column_now,
-            'column_list': column_list,}
-    return render(request, 'homepage/links.html', context)
-
 def mobile(request):
     site_info = Website.objects.first()
     column_now = Column.objects.get(pk=1)

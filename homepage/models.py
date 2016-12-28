@@ -29,21 +29,6 @@ class Website(models.Model):
     def __str__(self):
         return self.site_name.encode('utf-8')
 
-class FriendLinks(models.Model):
-    site = models.ForeignKey(Website, verbose_name='所属站点', on_delete=models.CASCADE)
-    linkname = models.CharField('链接名称', max_length=200, blank=True)
-    linkurl = models.CharField('链接地址', max_length=200, blank=True)
-    linkorder = models.IntegerField('栏目排序', default=0)
-    createtime = models.DateTimeField('创建时间', auto_now_add=True)
-
-    class Meta:
-        verbose_name = '友情链接管理'
-        verbose_name_plural = '友情链接管理'
-
-    def formatCreateTime(self):
-        return self.createtime.strftime("%Y-%m-%d %H:%M:%S")
-    formatCreateTime.short_description = '创建时间'
-
 class Column(models.Model):
     column_name = models.CharField('栏目名称', max_length=30)
     column_url = models.CharField('栏目Url', max_length=200)
