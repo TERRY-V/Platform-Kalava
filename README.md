@@ -1,5 +1,5 @@
-platform-kalava
-==========
+Platform-Kalava
+===============
 
 **Platform-Kalava** is a website based on django framework.
 
