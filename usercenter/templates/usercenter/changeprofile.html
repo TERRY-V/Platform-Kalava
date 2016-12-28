@@ -1,0 +1,114 @@
+{% extends "homepage/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}<title>个人信息_{{ site_info.site_name }}_{{ site_info.site_slogan }}</title>{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ site_info.site_keywords }}"/>{% endblock %}
+{% block description %}<meta name="description" content="{{ site_info.site_description }}"/>{% endblock %}
+
+{%block main%}
+
+<section class="body-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 column">
+                {% include "usercenter/sidebar.html" %}
+            </div>
+
+            <div class="col-md-9 column">
+                <div id="change-avatar" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <strong>编辑个人信息</strong>
+                        </h3>
+                    </div>
+
+                    {% if messages %}
+                        <div class="alert alert-success" role="alert">
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                   
+                    <div class="panel-body">
+                        <form action="/usercenter/changeprofile" method="post" role="form" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label>用户名</label>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <input type="text" class="form-control" name="username" placeholder="Enter ..." value="{{ user.username }}" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">头像</label>
+                                <div id="avatar-preview" class="avatar-preview">
+                                    <img src="{{ user.img }}" alt="avatar" class="img-responsive">
+                                </div>
+                                <br/>
+                                <input type="file" id="upload-avatar" accept="image/*" name="upload-avatar" onchange="previewImage()">
+                            </div>
+
+                            <div class="form-group">
+                                <label>邮箱</label>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <input type="text" class="form-control" name="email" placeholder="Enter ..." value="{{ user.email }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>联系地址</label>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <input type="text" class="form-control" name="address" placeholder="Enter ..." value="{{ user.address }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>联系电话</label>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <input type="text" class="form-control" name="phone" placeholder="Enter ..." value="{{ user.phone }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>个人简介</label>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <textarea class="form-control" rows="3" name="intro" placeholder="Enter ...">{{ user.intro }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">保存</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function previewImage() {
+        var file = document.getElementById("upload-avatar").files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            var preview = document.getElementById("avatar-preview");
+            preview.innerHTML = '<img src="' + this.result +'" alt="avatar" class="img-responsive">';
+        }
+        return false;
+    }
+</script>
+
+{% endblock %}

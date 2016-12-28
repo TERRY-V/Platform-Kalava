@@ -1,0 +1,140 @@
+{% extends "homepage/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}<title>API中心_{{ site_info.site_name }}_{{ site_info.site_slogan }}</title>{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ site_info.site_keywords }}"/>{% endblock %}
+{% block description %}<meta name="description" content="{{ site_info.site_description }}"/>{% endblock %}
+
+{%block main%}
+
+<section class="body-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 column">
+                {% include "usercenter/sidebar.html" %}
+            </div>
+
+            <div class="col-md-9 column">
+                <div class="panel panel-pynxl">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <strong>{{ menu_now.name }}</strong>
+                        </h3>
+                    </div>
+                    <ul class="list-group">
+                        {% for api in apis %}
+                            <li class="article list-group-item">
+                                <div class="article-title clearfix">
+                                    <h5>
+                                        <a href="/usercenter/api/{{ api.id }}">
+                                            <strong>{{ api.api_name }}</strong>
+                                        </a>
+                                    </h5>
+                                </div>
+
+                                <div class="article-labels">
+                                </div>
+
+                                <div class="row">
+                                    <div class="column col-md-9">
+                                        <div class="article-summary">
+                                            <p>{{ api.api_description }}</p>
+                                        </div>
+
+                                        <div class="article-info">
+                                            <span>
+                                                {{ api.apilog_set.count }}次请求
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="column col-md-3">
+                                        <button id="{{ api.id }}" class="btn btn-success btn-sm apply-button" type="button">
+                                            申请试用15天
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="modal fade" id="apply-modal" tabindex="-1" role="dialog" aria-labelledby="apply-modal" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">申请结果</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>...</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <ul class="pagination no-margin">
+                            <li>
+                                {% if apis.has_previous %}
+                                    <a href="/usercenter/api?q={{ query }}&page={{ apis.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+
+                            {% for page_num in page_range %}
+                                {% ifequal page_num apis.number %}
+                                    <li class="active">
+                                        <span class="current">{{ apis.number }}</span>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="/usercenter/api?q={{ query }}&page={{ page_num }}"">
+                                            <span>{{ page_num }}</span>
+                                        </a>
+                                    </li>
+                                {% endifequal %}
+                            {% endfor %}  
+
+                            <li>
+                                {% if apis.has_next %}
+                                    <a href="/usercenter/api?q={{ query }}&page={{ apis.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+                            <li><span>查询到{{ query_num }}条记录</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('button.apply-button').click(function(){
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+        $.post(
+            "/usercenter/applyapi", 
+            {"api_id": this.id},
+            function(data){
+                var status = data["status"];
+                if(status == 0) {
+                    $('#apply-modal p').html('您的申请已经提交，请耐心等待审核结果。');
+                    $('#apply-modal').modal('show');
+                } else {
+                    alert("申请失败，请稍后重新尝试...");
+                }
+            }
+        );
+        return false;
+    });
+</script>
+
+{% endblock %}

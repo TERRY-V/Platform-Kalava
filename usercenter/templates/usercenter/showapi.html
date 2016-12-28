@@ -1,0 +1,158 @@
+{% extends "homepage/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}<title>{{ api.api_name }}_{{ site_info.site_name }}_{{ site_info.site_slogan }}</title>{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ site_info.site_keywords }}"/>{% endblock %}
+{% block description %}<meta name="description" content="{{ site_info.site_description }}"/>{% endblock %}
+
+{%block main%}
+
+<section class="body-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 column">
+                {% include "usercenter/sidebar.html" %}
+            </div>
+
+            <div class="col-md-9 column">
+                <div class="panel panel-pynxl">
+                    <div class="panel-body">
+                        <div>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <span class="glyphicon glyphicon-home"></span>
+                                    <a href="/">首页</a>
+                                </li>
+                                <li>
+                                    <a href="{{ menu_now.link }}">
+                                        {{ menu_now.name }}
+                                    </a>
+                                </li>
+                                <li>
+                                    {{ api.api_name }}
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="page-header">
+                            <h3>
+                                <strong>{{ api.api_name|safe }}</strong>
+                            </h3>
+                            <h4>
+                                <small>发布于: {{ api.created_time|date:"Y-m-d H:i:s" }} | 请求: {{ api.apilog_set.count }}</small>
+                            </h4>
+                            <br/>
+                            <div class="labels">
+                                {% for label in api.labels_as_list %}
+                                    <a href="#"><span class="label label-pynxl-{{ forloop.counter|mod_lookup:6 }}">{{ label }}</span></a>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p><span><strong>请求方法: </strong></span>{% ifequal api.api_method 0 %}GET{% else %}POST{% endifequal %}</p>
+                                {% if api.api_url %}
+                                    <p><span><strong>URL: </strong></span>{{ api.api_url }}</p>
+                                {% endif %}
+                                {% if api.api_description %}
+                                    <p><span><strong>API描述: </strong></span>{{ api.api_description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5 id="storage panel-title">
+                                    <strong>1.请求参数</strong>
+                                </h5>
+                            </div>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th>参数名</th>
+                                        <th>参数类型</th>
+                                        <th>必填</th>
+                                        <th>参数位置</th>
+                                        <th>默认值</th>
+                                        <th>排序码</th>
+                                        <th>描述</th>
+                                    </tr>
+                                    {% for param in api.apiparam_set.all %}
+                                        <tr>
+                                            <td>{{ param.param_name }}</td>
+                                            <td>{{ param.param_type }}</td>
+                                            <td>{% ifequal param.param_requested 1 %}是{% else %}否{% endifequal %}</td>
+                                            <td>
+                                                {% ifequal param.param_location 0 %}header参数{% endifequal %}
+                                                {% ifequal param.param_location 1 %}url参数{% endifequal %}
+                                                {% ifequal param.param_location 2 %}body参数{% endifequal %}
+                                            </td>
+                                            <td>{{ param.param_default }}</td>
+                                            <td>{{ param.param_order }}</td>
+                                            <td>{{ param.param_description }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5 id="storage panel-title">
+                                    <strong>2.错误码</strong>
+                                </h5>
+                            </div>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th>错误码</th>
+                                        <th>错误码返回</th>
+                                        <th>错误码返回说明</th>
+                                    </tr>
+                                    {% for errno in api.apierrno_set.all %}
+                                        <tr>
+                                            <td>{{ errno.errno }}</td>
+                                            <td>{{ errno.errno_message }}</td>
+                                            <td>{{ errno.errno_intro }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5 id="storage panel-title">
+                                    <strong>3.请求示例</strong>
+                                </h5>
+                            </div>
+                            <div class="panel-body">
+                                <h4>{% ifequal api.api_method 0 %}GET{% else %}POST{% endifequal %}</h4>
+                                <h5>请求</h5>
+                                <div class="codehilite"><pre>{{ api.request_sample }}</pre></div>
+                                <h5>结果</h5>
+                                <div class="codehilite"><pre>{{ api.reply_sample }}</pre></div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5 id="storage panel-title">
+                                    <strong>4.测试</strong>
+                                </h5>
+                            </div>
+                            <div class="panel-body">
+                                <h4>{% ifequal api.api_method 0 %}GET{% else %}POST{% endifequal %}</h4>
+                                <pre>{{ api.request_sample }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "djadmin/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}<title>{{ site_info.site_name }}控制台</title>{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ site_info.site_keywords }}"/>{% endblock %}
+{% block description %}<meta name="description" content="{{ site_info.site_description }}"/>{% endblock %}
+
+{% block main %}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            {{ site_info.site_name }}
+            <small>控制台</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>&nbsp;首页</a></li>
+            <li><a href="#">
+                {% for menu in menu_list %}
+                    {% ifequal menu.id menu_now.menu_pid %}
+                        {{ menu.menu_name }}
+                    {% endifequal %}
+                {% endfor %}
+            </a></li>
+            <li class="active">{{ menu_now.menu_name }}</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        {% if messages %}
+            <div class="callout callout-info">
+                <h4>提示！</h4>
+                {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="add-button">
+            <p class="text-right">
+                <a href="/djadmin/api/{{ api.id }}/errno/add" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i> Add错误码</a>
+            </p>
+        </div>
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">{{ api.api_name }}</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>错误码</th>
+                            <th>错误码返回</th>
+                            <th>错误码返回说明</th>
+                            <th>操作</th>
+                        </tr>
+                        {% for errno in errnos %}
+                            <tr>
+                                <td>{{ errno.errno }}</td>
+                                <td>{{ errno.errno_message }}</td>
+                                <td>{{ errno.errno_intro }}</td>
+                                <td>
+                                    <a href="/djadmin/api/{{ api.id }}/errno/{{ errno.id }}/change">编辑</a>
+                                    <a href="/djadmin/api/{{ api.id }}/errno/{{ errno.id }}/delete">删除</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer clearfix">
+                <ul class="pagination no-margin pull-right">
+                    <li>
+                        {% if errnos.has_previous %}
+                            <a href="/djadmin/api/{{ api.id }}/errno?page={{ errnos.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        {% endif %}
+                    </li>
+
+                    {% for page_num in page_range %}
+                        {% ifequal page_num errnos.number %}
+                            <li class="active">
+                                <span class="current">{{ errnos.number }}</span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="/djadmin/api/{{ api.id }}/errno?page={{ page_num }}"">
+                                    <span>{{ page_num }}</span>
+                                </a>
+                            </li>
+                        {% endifequal %}
+                    {% endfor %}  
+
+                    <li>
+                        {% if errnos.has_next %}
+                            <a href="/djadmin/api/{{ api.id }}/errno?page={{ errnos.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                    <li><span>查询到{{ query_num }}条记录</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

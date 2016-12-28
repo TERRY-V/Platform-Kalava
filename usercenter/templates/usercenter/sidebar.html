@@ -1,0 +1,43 @@
+                <aside class="main-sidebar">
+                    <section class="sidebar">
+                        <a class="list-group-item">
+                            <img src="{{user.img}}" alt="avatar" width="40">
+                            &nbsp;
+                            <strong>{{ user.username }}</strong>
+                        </a>
+                        <div class="list-group">
+                            {% for menu in menu_list %}
+                                <div class="level-1">
+                                    {% ifequal menu.pid 0 %}
+                                        {% ifequal menu.visible 1 %}
+                                            <a href="#" class="list-group-item">
+                                                <strong>{{ menu.name }}</strong>
+                                                <span class="glyphicon glyphicon-chevron-left pull-right"></span>
+                                            </a>
+                                            <div class="level-2">
+                                                {% for sub_menu in menu_list %}
+                                                    {% ifequal sub_menu.pid menu.id %}
+                                                        {% ifequal sub_menu.visible 1 %}
+                                                            <a href="{{ sub_menu.link}}" class="list-group-item{% ifequal sub_menu.id menu_now.id %} active{% endifequal %}">
+                                                                &nbsp;&nbsp;{{ sub_menu.name }}
+                                                            </a>
+                                                        {% endifequal %}
+                                                    {% endifequal %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endifequal %}
+                                    {% endifequal %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    <!-- /.sidebar -->
+                </aside>
+
+                <script>
+                    $("div.level-1>a").click(function(){
+                        $(this).children("span").toggleClass("glyphicon-chevron-down").toggleClass("glyphicon-chevron-left")
+                        .parent().next().slideToggle();
+                        return false;
+                    });
+                </script>

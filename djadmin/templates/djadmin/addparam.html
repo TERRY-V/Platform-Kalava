@@ -1,0 +1,126 @@
+{% extends "djadmin/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}<title>{{ site_info.site_name }}控制台</title>{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ site_info.site_keywords }}"/>{% endblock %}
+{% block description %}<meta name="description" content="{{ site_info.site_description }}"/>{% endblock %}
+
+{% block main %}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            {{ site_info.site_name }}
+            <small>控制台</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>&nbsp;首页</a></li>
+            <li><a href="#">
+                {% for menu in menu_list %}
+                    {% ifequal menu.id menu_now.menu_pid %}
+                        {{ menu.menu_name }}
+                    {% endifequal %}
+                {% endfor %}
+            </a></li>
+            <li class="active">{{ menu_now.menu_name }}</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        {% if messages %}
+            <div class="callout callout-info">
+                <h4>提示！</h4>
+                {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ api.api_name }}</h3>
+            </div>
+            <!-- /.box-alert -->
+            <div class="box-body">
+                <form role="form" action="/djadmin/api/{{ api.id }}/param/add" method="post">
+                    {% csrf_token %}
+
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>参数名称</label>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="name" placeholder="Enter ...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>参数类型</label>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <select class="form-control" name="type">
+                                    <option value="string">字符串</option>
+                                    <option value="number">数字</option>
+                                    <option value="float">浮点型</option>
+                                    <option value="xml">xml</option>
+                                    <option value="json">json</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>必填</label>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <input type="radio" name="requested" value="0"> 否
+                                <input type="radio" name="requested" value="1" checked> 是
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>参数位置</label>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <input type="radio" name="location" value="0"> header参数
+                                <input type="radio" name="location" value="1"> url参数
+                                <input type="radio" name="location" value="2" checked> body参数
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>默认值</label>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="default" placeholder="Enter ...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>排序码</label>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="order" placeholder="Enter ...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>描述</label>
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <textarea class="form-control" rows="3" name="description" placeholder="Enter ..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">添加</button>
+                        &nbsp;
+                        <a href="/djadmin/api/{{ api.id }}/param" class="btn btn-success" role="button">返回</a>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-body -->
+          </div>
+    </section>
+</div>
+
+{% endblock %}
