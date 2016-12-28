@@ -275,6 +275,14 @@ def changeUserProfile(request, user_id):
         user.address = request.POST.get('address')
         user.phone = request.POST.get('phone')
         user.intro = request.POST.get('intro')
+        if len(request.FILES):
+            avatar_blob = request.FILES['upload-avatar']
+            avatar_path = 'static/avatar/%s.jpg' % user_id
+            with open(avatar_path, 'wb+') as destination:
+                for chunk in avatar_blob.chunks():
+                    destination.write(chunk)
+            user.img = '/' + avatar_path
+        user.save()
         user.save()
         messages.add_message(request, messages.INFO, u'用户信息保存成功！')
         return redirect('/djadmin/user')

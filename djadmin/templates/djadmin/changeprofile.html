@@ -42,7 +42,7 @@
             </div>
             <!-- /.box-alert -->
             <div class="box-body">
-                <form role="form" action="/djadmin/user/{{ user.id }}/changeprofile" method="post">
+                <form role="form" action="/djadmin/user/{{ user.id }}/changeprofile" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="form-group">
@@ -57,8 +57,10 @@
                     <div class="form-group">
                         <label>头像预览</label>
                         <div id="avatar-preview" class="avatar-preview">
-                            <img src="{{ user.img }}" alt="avatar" class="img-responsive" width="120px" height="120px">
+                            <img src="{{ user.img }}" alt="avatar" class="img-responsive" width="150px" height="150px">
                         </div>
+                        <br/>
+                        <input type="file" id="upload-avatar" accept="image/*" name="upload-avatar" onchange="previewImage()">
                     </div>
 
                     <div class="form-group">
@@ -102,5 +104,18 @@
           </div>
     </section>
 </div>
+
+<script>
+    function previewImage() {
+        var file = document.getElementById("upload-avatar").files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            var preview = document.getElementById("avatar-preview");
+            preview.innerHTML = '<img src="' + this.result +'" alt="avatar" class="img-responsive" width="150px" height="150px">';
+        }
+        return false;
+    }
+</script>
 
 {% endblock %}
