@@ -2,6 +2,7 @@
 
 import os
 import json
+import time
 import uuid
 
 from datetime import datetime, timedelta
@@ -293,6 +294,7 @@ def applyAPI(request):
         permission.api_key = uuid.uuid4()
         permission.expired_time = datetime.now()+timedelta(days=15)
         permission.api_status = 0
+        time.sleep(1)
         permission.save()
     else:
         context["status"] = -1

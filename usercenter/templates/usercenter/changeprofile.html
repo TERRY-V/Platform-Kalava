@@ -49,7 +49,7 @@
                             <div class="form-group">
                                 <label class="control-label">头像</label>
                                 <div id="avatar-preview" class="avatar-preview">
-                                    <img src="{{ user.img }}" alt="avatar" class="img-responsive">
+                                    <img src="{{ user.img }}" alt="avatar" class="img-responsive" width="200px" height="200px">
                                 </div>
                                 <br/>
                                 <input type="file" id="upload-avatar" accept="image/*" name="upload-avatar" onchange="previewImage()">
@@ -105,7 +105,7 @@
         reader.readAsDataURL(file);
         reader.onload = function(e) {
             var preview = document.getElementById("avatar-preview");
-            preview.innerHTML = '<img src="' + this.result +'" alt="avatar" class="img-responsive">';
+            preview.innerHTML = '<img src="' + this.result +'" alt="avatar" class="img-responsive" width="200px" height="200px">';
         }
         return false;
     }
