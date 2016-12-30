@@ -129,7 +129,8 @@
                     $('#apply-modal p').html('您的申请已经提交，请耐心等待审核结果。');
                     $('#apply-modal').modal('show');
                 } else {
-                    alert("申请失败，请稍后重新尝试...");
+                    $('#apply-modal p').html(data["errors"][0]);
+                    $('#apply-modal').modal('show');
                 }
             }
         );

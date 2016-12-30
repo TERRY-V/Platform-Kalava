@@ -294,12 +294,14 @@ def applyAPI(request):
         permission.api_key = uuid.uuid4()
         permission.expired_time = datetime.now()+timedelta(days=15)
         permission.api_status = 0
-        time.sleep(1)
-        permission.save()
+        if ApiPermission.objects.filter(api=permission.api, user=permission.user).exists():
+            context["status"] = -1
+            context["errors"] = [u'您已经申请过该API了']
+        else:
+            permission.save()
     else:
-        context["status"] = -1
-        context["errors"] = []
-        context["errors"].append(u"请求无效")
+        context["status"] = -2
+        context["errors"] = [u'申请无效']
     return HttpResponse(json.dumps(context), content_type="application/json")
 
 @login_required(login_url='/usercenter/login')
