@@ -44,11 +44,13 @@
                                         </div>
                                     </div>
                                     <div class="column col-md-4">
-                                        {% ifequal permission.api_status 1 %}
+                                        {% if permission.api_status == 1 %}
                                             <pre>apikey: {{ permission.api_key }}</pre>
-                                        {% else %}
+                                        {% elif permission.api_status == 0 %}
                                             <span class="label label-warning">审核中</span>
-                                        {% endifequal %}
+                                        {% else %}
+                                            <span class="label label-warning">已停用</span>
+                                        {% endif %}
                                     </div>
                                     <div class="column col-md-2">
                                         <a href="/usercenter/api/{{ permission.api.id }}" class="btn btn-success btn-sm" role="button">API文档</a>

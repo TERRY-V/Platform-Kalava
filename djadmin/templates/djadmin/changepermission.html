@@ -92,6 +92,7 @@
                             <div class="col-xs-4">
                                 <input type="radio" name="status" value="0"{% ifequal permission.api_status 0 %} checked{% endifequal %}> 待审核
                                 <input type="radio" name="status" value="1"{% ifequal permission.api_status 1 %} checked{% endifequal %}> 审核通过
+                                <input type="radio" name="status" value="-1"{% ifequal permission.api_status -1 %} checked{% endifequal %}> 已停用
                             </div>
                         </div>
                     </div>
