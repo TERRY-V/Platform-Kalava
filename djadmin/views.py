@@ -283,7 +283,6 @@ def changeUserProfile(request, user_id):
                     destination.write(chunk)
             user.img = '/' + avatar_path
         user.save()
-        user.save()
         messages.add_message(request, messages.INFO, u'用户信息保存成功！')
         return redirect('/djadmin/user')
 
@@ -306,7 +305,7 @@ def api(request):
         api_list = api_list.filter(api_name__contains=keyword.encode('utf-8'))
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(api_list, 20)
+    paginator = Paginator(api_list, 10)
     try:
         page = int(page)
         apis = paginator.page(page)
@@ -355,6 +354,7 @@ def addAPI(request):
         method = request.POST.get("method")
         request_sample = request.POST.get("request_sample")
         reply_sample = request.POST.get("reply_sample")
+        status = request.POST.get("status")
         api = ApiInfo(api_name=name, 
             api_provider=provider,
             api_keywords=keywords,
@@ -362,7 +362,8 @@ def addAPI(request):
             api_url=url,
             api_method=method,
             request_sample=request_sample,
-            reply_sample=reply_sample)
+            reply_sample=reply_sample,
+            api_status=status)
         api.save()
         messages.add_message(request, messages.INFO, u'服务API添加成功！')
         return redirect('/djadmin/api')
@@ -388,6 +389,7 @@ def changeAPI(request, api_id):
         api.api_method = request.POST.get("method")
         api.request_sample = request.POST.get("request_sample")
         api.reply_sample = request.POST.get("reply_sample")
+        api.api_status = request.POST.get("status")
         api.save()
         messages.add_message(request, messages.INFO, u'服务信息保存成功！')
         return redirect('/djadmin/api')
@@ -615,7 +617,7 @@ def permission(request):
         permission_list = permission_list.filter(user_id=user.id)
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(permission_list, 20)
+    paginator = Paginator(permission_list, 10)
     try:
         page = int(page)
         permissions = paginator.page(page)
@@ -681,7 +683,6 @@ def changePermission(request, permission_id):
         permission.api = ApiInfo.objects.get(id=api_id)
         permission.api_status = status
         permission.expired_time = datetime.strptime(expired_time, '%m/%d/%Y')
-        print(permission.expired_time)
         permission.save()
         messages.add_message(request, messages.INFO, u'权限信息编辑成功！')
         return redirect('/djadmin/permission')

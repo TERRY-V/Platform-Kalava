@@ -67,6 +67,7 @@
                             <th>服务名</th>
                             <th>服务商</th>
                             <th>服务简介</th>
+                            <th>是否开放申请</th>
                             <th>创建时间</th>
                             <th>操作</th>
                         </tr>
@@ -75,7 +76,14 @@
                                 <td>{{ api.id }}</td>
                                 <td><a href="/djadmin/api/{{ api.id }}/change">{{ api.api_name }}</a></td>
                                 <td>{{ api.api_provider }}</td>
-                                <td>{{ api.api_description }}</td>
+                                <td>{{ api.api_description|slice:"32" }}</td>
+                                <td>
+                                    {% ifequal api.api_status 1 %}
+                                        <span class="label label-success">是</span>
+                                    {% else %}
+                                        <span class="label label-warning">否</span>
+                                    {% endifequal %}
+                                </td>
                                 <td>{{ api.created_time|date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="/djadmin/api/{{ api.id }}/param">参数</a>

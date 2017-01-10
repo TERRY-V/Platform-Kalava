@@ -6,7 +6,7 @@ html, body {
 
 body {
 	font: 13px/1.3 'Arial','Microsoft YaHei';
-	background: url("/static/images/background/b1.jpg") repeat-x top center fixed;
+	background: url("/static/images/background/b5.jpg") repeat-x top center fixed;
 	background-color: #b4daef;
 	color: #333;
 	text-decoration: none;
@@ -29,6 +29,13 @@ body {
 .col-xs-5ths {
 	width: 20%;
 	float: left;
+}
+
+.col-xs-offset-35,
+.col-sn-offset-35,
+.col-md-offset-35,
+.col-lg-offset-35 {
+	margin-left: 29.1666667%;
 }
 
 @media (min-width: 768px) {

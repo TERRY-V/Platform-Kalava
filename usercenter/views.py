@@ -240,13 +240,10 @@ def api(request):
     menu_list = Menu.objects.order_by('order')
     menu_now = get_object_or_404(Menu, link='/usercenter/api')
 
-    api_list = ApiInfo.objects.all()
-    keyword = request.GET.get('q')
-    if keyword and len(keyword):
-        api_list = api_list.filter(api_name__contains=keyword.encode('utf-8'))
+    api_list = ApiInfo.objects.filter(api_status=1)
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(api_list, 20)
+    paginator = Paginator(api_list, 10)
     try:
         page = int(page)
         apis = paginator.page(page)
