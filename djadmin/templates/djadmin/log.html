@@ -68,7 +68,7 @@
                         <tr>
                             <th>编号</th>
                             <th>API名称</th>
-                            <th>图片</th>
+                            <th style="text-align: center;">图片</th>
                             <th>apikey</th>
                             <th>返回状态</th>
                             <th>返回信息</th>
@@ -79,11 +79,7 @@
                             <tr>
                                 <td>{{ log.id }}</td>
                                 <td>{{ log.api.api_name }}</td>
-                                <td>
-                                    <a href="{{ log.image_url }}" target="_blank">
-                                        <img src="{{ log.image_url }}" alt="图片" width="180px" height="150px">
-                                    </a>
-                                </td>
+                                <td align="center"><img src="{{ log.image_url }}" alt="图片" width="auto" height="150px"></td>
                                 <td>{{ log.api_key }}</td>
                                 <td>{{ log.status }}</td>
                                 <td>
@@ -151,5 +147,21 @@
         </div>
     </section>
 </div>
+
+<script>
+    $("table").on("click", "img", function() {
+        var imgurl = $(this).attr("src");
+        var html = '<img src="' + imgurl + '" class="img-responsive" style="width: 100%;">'
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            area: '516px',
+            skin: 'layui-layer-nobg',
+            shadeClose: true,
+            content: html
+        });
+    });
+</script>
 
 {% endblock %}

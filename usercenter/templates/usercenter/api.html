@@ -58,23 +58,6 @@
                         {% endfor %}
                     </ul>
 
-                    <div class="modal fade" id="apply-modal" tabindex="-1" role="dialog" aria-labelledby="apply-modal" aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                    <h4 class="modal-title">申请结果</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>...</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="text-center">
                         <ul class="pagination no-margin">
                             <li>
@@ -126,11 +109,20 @@
             function(data){
                 var status = data["status"];
                 if(status == 0) {
-                    $('#apply-modal p').html('您的申请已经提交，请耐心等待审核结果。');
+                    $('#apply-modal p').html('');
                     $('#apply-modal').modal('show');
+                    layer.msg('亲，您的申请已经提交，请耐心等待审核结果。', 
+                        {
+                            time: 5000,
+                            btn: ['明白了', '知道了']
+                        },
+                        function() {
+                            location.replace("/usercenter/myapi");
+                        }
+                    );
                 } else {
-                    $('#apply-modal p').html(data["errors"][0]);
-                    $('#apply-modal').modal('show');
+                    $('#apply-modal p').html();
+                    layer.msg(data["errors"][0]);
                 }
             }
         );
