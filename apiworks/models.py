@@ -87,3 +87,13 @@ class ApiLog(models.Model):
         verbose_name = u'日志管理'
         verbose_name_plural = u'日志管理'
 
+class ApiImage(models.Model):
+    api = models.ForeignKey(ApiInfo, verbose_name=u'所属服务', on_delete=models.CASCADE)
+    image_path = models.CharField(u'图片路径', max_length=200, blank=True)
+    created_time = models.DateTimeField(u'创建时间', auto_now_add=True)
+    
+    class Meta:
+        db_table = 'api_image'
+        verbose_name = u'示例图片管理'
+        verbose_name_plural = u'示例图片管理'
+
